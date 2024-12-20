@@ -1,5 +1,6 @@
-biopython==1.84
-gtfparse==2.5.0
-pandas==2.2.3
-pandas-datareader==0.10.0
-polars==0.20.31
+biopython==1.84 
+gtfparse==2.5.0 
+pandas==2.2.3 
+pandas-datareader==0.10.0 
+polars==0.20.31 
+pyarrow
