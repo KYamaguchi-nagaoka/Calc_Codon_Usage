@@ -4,21 +4,8 @@ import polars as pl
 from gtfparse import read_gtf
 import streamlit as st
 from io import StringIO, BytesIO
+from sub_folder.function import *
 
-def read_fasta_file(file):
-    sequences = []
-    stringio = StringIO(file.getvalue().decode("utf-8"))
-    for record in SeqIO.parse(stringio, "fasta"):
-        sequences.append(record)
-    return sequences
-
-def save_to_fasta(targets, CDSs):
-    fasta_content = ""
-    for target, cds in zip(targets, CDSs):
-        fasta_content += f">{target}\n"
-        for i in range(0, len(cds), 50):
-            fasta_content += str(cds[i:i + 50]) + "\n"
-    return fasta_content
 
 def main():
     st.title("Make CDS from All_DNA_seq and gtf_file")
@@ -79,11 +66,15 @@ def main():
             CDSs.append(complete_cds)
 
         # Save the CDSs to a FASTA file
-        filename_input = st.text_input("Enter filename for the FASTA file:")
+        # ファイル名の入力
+        filename_input = st.text_input("Enter filename the FASTA file:")
         fasta_content = save_to_fasta(targets, CDSs)
-        b_io = BytesIO(fasta_content.encode('utf-8'))
-        st.download_button(label="Download FASTA", data=b_io, file_name=filename_input+".fasta", mime="text/fasta")
-        st.success("CDS extraction and file generation completed successfully.")
+        # ダウンロードボタンの追加
+        if filename_input:
+            b_io = BytesIO(fasta_content.encode('utf-8'))
+            st.download_button(label="Download FASTA", data=b_io, file_name=f"{filename_input}.fasta", mime="text/fasta")
+            st.success("CDS extraction and file generation completed successfully.")
+ 
 
 if __name__ == '__main__':
     main()
