@@ -1,9 +1,10 @@
-biopython==1.84 
-gtfparse==2.5.0 
-pandas==2.2.3 
-pandas-datareader==0.10.0 
-polars==0.20.31 
-pyarrow
-streamlit
+biopython==1.84
+gtfparse==2.5.0
+pandas==2.2.3
+pandas-datareader==0.10.0
+polars==0.20.31
+pyarrow==13.0.0
+streamlit==1.18.1
+
 
 
