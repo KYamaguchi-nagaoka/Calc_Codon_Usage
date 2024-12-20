@@ -4,6 +4,7 @@ from Bio import SeqIO
 from io import StringIO, BytesIO
 import pandas as pd
 from sub_folder.function import *
+import pyarrow
 
 # コドン辞書
 codon_dict = {
