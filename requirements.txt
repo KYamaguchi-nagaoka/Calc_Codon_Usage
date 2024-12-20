@@ -3,8 +3,9 @@ gtfparse==2.5.0
 pandas==2.2.3
 pandas-datareader==0.10.0
 polars==0.20.31
-pyarrow>=14.0.2,<14.1.0
+pyarrow  # Allow pip to resolve to a compatible version
 streamlit
+
 
 
 
