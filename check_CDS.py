@@ -2,7 +2,7 @@ import re
 import streamlit as st
 from Bio import SeqIO
 from io import StringIO
-
+from sub_folder.function import *
 # コドン辞書
 codon_dict = {
     'UUU': 'F', 'UUC': 'F', 'UUA': 'L', 'UUG': 'L',
@@ -27,16 +27,7 @@ codon_dict = {
 codon_dict_with_t = {key.replace('U', 'T'): value for key, value in codon_dict.items()}
 codon_dict = codon_dict_with_t
 
-# DNA配列をアミノ酸配列に変換する関数
-def dna_to_protein(dna_sequence):
-    amino_acids = []
-    for i in range(0, len(dna_sequence) - 2, 3):  # 3つずつ処理
-        codon = dna_sequence[i:i+3]
-        if codon in codon_dict:
-            amino_acids.append(codon_dict[codon])  # コドンからアミノ酸を取得
-        else:
-            amino_acids.append('?')  # 無効なコドンの場合
-    return ''.join(amino_acids)
+
 
 def main():
     st.title("CDS Checker")
@@ -53,7 +44,7 @@ def main():
         # Read CDS file
         cds_stringio = StringIO(CDS_file.getvalue().decode("utf-8"))
         for record in SeqIO.parse(cds_stringio, "fasta"):
-            protein_sequence = dna_to_protein(str(record.seq))
+            protein_sequence = dna_to_protein(str(record.seq),codon_dict)
             CDS[record.id] = protein_sequence
 
         # Read protein file
