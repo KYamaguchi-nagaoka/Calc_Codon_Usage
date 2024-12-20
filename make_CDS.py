@@ -4,6 +4,7 @@ import polars as pl
 from gtfparse import read_gtf
 import streamlit as st
 from io import StringIO, BytesIO
+import pyarrow
 from sub_folder.function import *
 
 
