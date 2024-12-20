@@ -3,6 +3,7 @@ import streamlit as st
 from Bio import SeqIO
 from io import StringIO, BytesIO
 import pandas as pd
+from sub_folder.function import *
 
 # コドン辞書
 codon_dict = {
@@ -28,24 +29,6 @@ codon_dict = {
 codon_dict_with_t = {key.replace('U', 'T'): value for key, value in codon_dict.items()}
 codon_dict = codon_dict_with_t
 
-# コドン使用率を計算する関数
-def calculate_codon_usage(cds_sequences):
-    codon_usage = {codon: 0 for codon in codon_dict.keys()}
-    total_codons = 0
-
-    for sequence in cds_sequences:
-        for i in range(0, len(sequence) - 2, 3):
-            codon = sequence[i:i+3]
-            if codon in codon_usage:
-                codon_usage[codon] += 1
-                total_codons += 1
-
-    amino_acid_usage = {aa: 0 for aa in set(codon_dict.values())}
-    for codon, aa in codon_dict.items():
-        amino_acid_usage[aa] += codon_usage[codon]
-
-    codon_freq = {codon: (count / amino_acid_usage[codon_dict[codon]]) if amino_acid_usage[codon_dict[codon]] else 0 for codon, count in codon_usage.items()}
-    return codon_usage, codon_freq
 
 def main():
     st.title("CDS Codon Usage Analyzer")
@@ -63,7 +46,7 @@ def main():
             CDS.append(str(record.seq))
 
         # コドン使用率を計算
-        codon_usage, codon_freq = calculate_codon_usage(CDS)
+        codon_usage, codon_freq = calculate_codon_usage(CDS,codon_dict)
         
         # 結果をDataFrameに保存
         data = []
@@ -74,16 +57,20 @@ def main():
             data.append([amino_acid, codon, count, freq])
         
         df = pd.DataFrame(data, columns=["amino_acid", "codon", "count", "freq"])
-        df['freq'] = df['freq'].round(9)  # 小数点以下の桁数を指定
+        df['freq'] = df['freq'].round(3)  # 小数点以下の桁数を指定
 
         # CSVに変換
         csv = df.to_csv(index=False)
-        b_io = BytesIO(csv.encode())
 
+# ファイル名の入力
+        filename_input = st.text_input("Enter filename for the CSV file:")
+        
         # ダウンロードボタンの追加
-        st.download_button(label="Download Codon Usage CSV", data=b_io, file_name="codon_usage.csv", mime="text/csv")
-        st.success("Codon usage analysis completed successfully.")
+        if filename_input:
+            b_io = BytesIO(csv.encode())
+            st.download_button(label="Download Codon Usage CSV", data=b_io, file_name=f"{filename_input}.csv", mime="text/csv")
+            st.success("Codon usage analysis completed successfully.")
+        
         st.dataframe(df)  # 解析結果を表示
-
 if __name__ == '__main__':
     main()
