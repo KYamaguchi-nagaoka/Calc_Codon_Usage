@@ -5,7 +5,7 @@ from gtfparse import read_gtf
 import streamlit as st
 from io import StringIO, BytesIO
 import re
-import pyarrow
+
 from sub_folder.function import *
 
 # コドン辞書
