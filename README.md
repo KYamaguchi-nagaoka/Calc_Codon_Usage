@@ -1,4 +1,4 @@
-#　Calc Codon Usage 
+# Calc Codon Usage 
 
 This project is designed to calculate codon usage from genome sequences. The process involves several steps, including creating CDS (Coding Sequences) from genome and gene annotation files, verifying these CDS sequences, and finally calculating the codon usage.
 
